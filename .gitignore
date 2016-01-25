@@ -1,0 +1,6 @@
+*.pro.user
+build*
+*.build
+Debug
+*.stash
+*.xcodeproj
