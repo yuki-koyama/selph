@@ -1,16 +1,17 @@
 #include "interpolator.h"
 
-#include <cmath>
 #include <fstream>
 #include <sstream>
+#include <numeric>
+#include <thread>
+#include <iostream>
+#include <cmath>
 #include <cfloat>
 #include <Eigen/Core>
 #include <Eigen/LU>
-#include <boost/thread.hpp>
 
 using namespace std;
 using namespace Eigen;
-using namespace boost;
 
 extern VectorXd solveLinearSystem(MatrixXd A, VectorXd y);
 template<class T> extern string toString(T x);
@@ -21,17 +22,8 @@ Interpolator::Interpolator() :
     epsilon(2.0),
     lambda(0.1),
     useRegularization(true),
-    useMultiThread(false),
     readyForUse(false)
 {
-}
-
-// for multithread
-void Interpolator::calculateSumOfRBFValues(const vector<double>& x, int start, int end, double* result)
-{
-    for (int i = start; i < end; ++ i) {
-        *result += w[i] * getRBFValue(x, xs[i]);
-    }
 }
 
 void Interpolator::resetAll()
@@ -96,21 +88,9 @@ double Interpolator::getInterpolatedValue(vector<double> x)
 
     int    dim    = w.size();
     double result = 0.0;
-
-    if (useMultiThread) {
-        thread_group group;
-        vector<double> pSum;
-        pSum.resize(4);
-        group.create_thread(bind(&Interpolator::calculateSumOfRBFValues, this, x, 0 * dim / 4, 1 * dim / 4, &pSum[0]));
-        group.create_thread(bind(&Interpolator::calculateSumOfRBFValues, this, x, 1 * dim / 4, 2 * dim / 4, &pSum[1]));
-        group.create_thread(bind(&Interpolator::calculateSumOfRBFValues, this, x, 2 * dim / 4, 3 * dim / 4, &pSum[2]));
-        group.create_thread(bind(&Interpolator::calculateSumOfRBFValues, this, x, 3 * dim / 4, dim, &pSum[3]));
-        group.join_all();
-        result = pSum[0] + pSum[1] + pSum[2] + pSum[3];
-    } else {
-        for (int i = 0; i < dim; ++ i) {
-            result += w[i] * getRBFValue(x, xs[i]);
-        }
+    
+    for (int i = 0; i < dim; ++ i) {
+        result += w[i] * getRBFValue(x, xs[i]);
     }
 
     return result;

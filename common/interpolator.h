@@ -20,7 +20,6 @@ public:
     double lambda;
 
     bool useRegularization;
-    bool useMultiThread;
 
     // API
     void    resetAll();
