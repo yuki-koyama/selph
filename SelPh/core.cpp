@@ -25,7 +25,7 @@ Core::Core() :
     nReferencePhotos(10),
     currentIndex(0),
     isBaselineMode(false),
-    uiSize(1),
+    uiSize(0),
     useVisualization(true),
     useOptimization(false),
     useInitialOptimization(false),
