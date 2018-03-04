@@ -3,9 +3,7 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
-#include <boost/timer/timer.hpp>
 
-//#include <Eigen/LU>
 #include <Eigen/Cholesky>
 
 using namespace std;
