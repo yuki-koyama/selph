@@ -46,5 +46,5 @@ set_source_files_properties(
 	PROPERTIES
 	MACOSX_PACKAGE_LOCATION Resources/shaders
 )
-
+set_target_properties(SelPh PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist.in)
 target_link_libraries(SelPh Qt5::Widgets Qt5::Concurrent Qt5::OpenGL ${NLopt_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
