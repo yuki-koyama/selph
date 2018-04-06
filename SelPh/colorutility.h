@@ -31,8 +31,6 @@ inline Eigen::Vector3d rgb2Lab(const Eigen::Vector3d& rgb)
     return XYZ2Lab(rgb2XYZ(rgb));
 }
 
-Eigen::Vector3d getHeatmapColor(double x);
-
 }
 
 #endif // COLORUTILITY_H

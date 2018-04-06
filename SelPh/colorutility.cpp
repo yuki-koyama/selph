@@ -212,30 +212,4 @@ Vector3d rgb2hsl(const Vector3d &rgb)
     return Vector3d(h, s, l);
 }
 
-Vector3d getHeatmapColor(double x)
-{
-    x = max(0.0, min(1.0, x));
-
-    static const Vector3d r(1.0, 0.0, 0.0);
-    static const Vector3d y(1.0, 1.0, 0.0);
-    static const Vector3d g(0.0, 1.0, 0.0);
-    static const Vector3d c(0.0, 1.0, 1.0);
-    static const Vector3d b(0.0, 0.0, 1.0);
-    Vector3d result;
-    if (x < 0.25) {
-        const double t = x * 4.0;
-        result = t * c + (1.0 - t) * b;
-    } else if (x < 0.50) {
-        const double t = (x - 0.25) * 4.0;
-        result = t * g + (1.0 - t) * c;
-    } else if (x < 0.75) {
-        const double t = (x - 0.50) * 4.0;
-        result = t * y + (1.0 - t) * g;
-    } else {
-        const double t = (x - 0.75) * 4.0;
-        result = t * r + (1.0 - t) * y;
-    }
-    return result;
-}
-
 }

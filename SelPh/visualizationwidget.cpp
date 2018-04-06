@@ -4,8 +4,8 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVector3D>
+#include <tinycolormap.h>
 #include "core.h"
-#include "colorutility.h"
 #include "eigenutility.h"
 
 using namespace std;
@@ -60,7 +60,7 @@ void VisualizationWidget::paintEvent(QPaintEvent *event)
         value = std::isnan(value) ? 0.5 : value;
 
         // get heatmap color
-        Vector3d colorVec = ColorUtility::getHeatmapColor(value);
+        Vector3d colorVec = tinycolormap::GetHeatColor(value);
         QColor color(colorVec(0) * 255.0, colorVec(1) * 255.0, colorVec(2) * 255.0);
 
         // control saturation using the confidence value
