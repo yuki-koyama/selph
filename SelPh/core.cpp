@@ -5,11 +5,11 @@
 #include <cstdlib>
 #include <ctime>
 #include <Eigen/SVD>
+#include <mathtoolbox/metric-mds.hpp>
 #include "mainwindow.h"
 #include "image.h"
 #include "previewwidget.h"
 #include "eigenutility.h"
-#include "mds.h"
 #include "histogram.h"
 #include "metriclearning.h"
 
@@ -174,7 +174,7 @@ void Core::computeMDS()
 #ifdef TIME
     const auto t1 = system_clock::now();
 #endif
-    const MatrixXd X = MDS::computeMDS(D, std::min<unsigned>(featureDim, D.rows()));
+    const MatrixXd X = mathtoolbox::ComputeMetricMds(D, std::min<unsigned>(featureDim, D.rows()));
 #ifdef TIME
     const auto t2 = system_clock::now();
     std::cout << "Metric MDS: " << duration_cast<milliseconds>(t2 - t1).count() << " [ms]" << std::endl;

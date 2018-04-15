@@ -16,6 +16,7 @@ include_directories(${NLopt_INCLUDE_DIRS})
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLUT_INCLUDE_DIRS})
 include_directories(${TINYCOLORMAP_INCLUDE_DIR})
+include_directories(${MATHTOOLBOX_INCLUDE_DIR})
 
 file(GLOB files *.cpp *.h *.ui)
 file(GLOB data_files_small ../resources/data/test_set_small/*.JPG)
@@ -47,4 +48,4 @@ set_source_files_properties(
 	MACOSX_PACKAGE_LOCATION Resources/shaders
 )
 set_target_properties(SelPh PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist.in)
-target_link_libraries(SelPh Qt5::Widgets Qt5::Concurrent Qt5::OpenGL ${NLopt_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+target_link_libraries(SelPh Qt5::Widgets Qt5::Concurrent Qt5::OpenGL ${NLopt_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} mathtoolbox)
