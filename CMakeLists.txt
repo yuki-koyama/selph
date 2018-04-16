@@ -7,10 +7,27 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE Release)
 
-add_subdirectory(external/mathtoolbox)
-set(MATHTOOLBOX_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/mathtoolbox/)
+set(EXTERNAL_INSTALL_DIR ${CMAKE_BINARY_DIR}/external)
 
-# Set include directory paths for header-only libraries
-set(TINYCOLORMAP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/tinycolormap/include)
+include_directories(${EXTERNAL_INSTALL_DIR}/include)
+link_directories(${EXTERNAL_INSTALL_DIR}/lib)
 
 add_subdirectory(SelPh)
+
+include(ExternalProject)
+ExternalProject_Add(
+	mathtoolbox
+	GIT_REPOSITORY ${CMAKE_SOURCE_DIR}/external/mathtoolbox
+	GIT_TAG master
+	INSTALL_DIR ${EXTERNAL_INSTALL_DIR}
+	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+)
+ExternalProject_Add(
+	tinycolormap
+	GIT_REPOSITORY ${CMAKE_SOURCE_DIR}/external/tinycolormap
+	GIT_TAG master
+	INSTALL_DIR ${EXTERNAL_INSTALL_DIR}
+	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+)
+
+add_dependencies(SelPh tinycolormap mathtoolbox)
