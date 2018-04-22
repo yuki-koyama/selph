@@ -25,7 +25,7 @@ ExternalProject_Add(
 ExternalProject_Add(
 	tinycolormap
 	GIT_REPOSITORY ${CMAKE_SOURCE_DIR}/external/tinycolormap
-	GIT_TAG master
+	GIT_TAG v0.1.0
 	INSTALL_DIR ${EXTERNAL_INSTALL_DIR}
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 )
