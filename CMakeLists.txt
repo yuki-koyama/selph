@@ -18,7 +18,7 @@ include(ExternalProject)
 ExternalProject_Add(
 	mathtoolbox
 	GIT_REPOSITORY ${CMAKE_SOURCE_DIR}/external/mathtoolbox
-	GIT_TAG master
+	GIT_TAG c4c693507c8e49a58a21202d605e13e4c9d9bc65
 	INSTALL_DIR ${EXTERNAL_INSTALL_DIR}
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 )
