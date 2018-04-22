@@ -18,7 +18,7 @@ This software has been written for and tested on Mac OS X (x86_64). Other platfo
 We use cmake https://cmake.org/ for building source codes. 
 
 ```
-git clone https://github.com/yuki-koyama/selph.git
+git clone https://github.com/yuki-koyama/selph.git --recursive
 cd selph
 mkdir build
 cd build
