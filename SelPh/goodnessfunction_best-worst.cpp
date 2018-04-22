@@ -8,7 +8,6 @@
 #endif
 #include <nlopt.hpp>
 #include "eigenutility.h"
-#include "interpolator.h"
 #include "core.h"
 
 using std::vector;
