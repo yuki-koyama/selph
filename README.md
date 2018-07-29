@@ -1,7 +1,7 @@
 # SelPh
+A machine learning-based photo color enhancement system that implicitly learns users' preference.
 
-This software has been developed for the following research paper: 
-
+### Publication
 Yuki Koyama, Daisuke Sakamoto, and Takeo Igarashi. 2016. SelPh: Progressive Learning and Support of Manual Photo Color Enhancement. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '16), pp.2520--2532.
 
 ### Project Page
@@ -11,7 +11,8 @@ Please visit our project page for details: http://koyama.xyz/project/SelPh/
 C++11 is used for most parts. For real-time photo color enhancement, GLSL is used.
 
 ## Set Up
-### Mac OS X / macOS
+
+### macOS
 This software has been written for and tested on Mac OS X (x86_64). Other platforms (e.g., Windows, Linux) are currently not supported. If you want to build this software on other platforms, you might need to modify several parts (e.g., header paths). Pull requests welcome.
 
 ### Build using CMake
@@ -28,8 +29,6 @@ make
 
 ## License
 The source codes are released under the **MIT License**; see LICENSE.txt.
-
-Under the MIT License, you can freely use our source codes in your commercial software (on your own responsibility), but we would appreciate it if you would contact us :-)
 
 ## Dependencies
 - Eigen http://eigen.tuxfamily.org/
