@@ -7,8 +7,14 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE Release)
 
-set(EXTERNAL_INSTALL_DIR ${CMAKE_BINARY_DIR}/external)
+if(APPLE AND EXISTS /usr/local/opt/qt5)
+	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt5")
+endif()
+if(APPLE AND EXISTS /usr/local/opt/qt)
+	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt")
+endif()
 
+set(EXTERNAL_INSTALL_DIR ${CMAKE_BINARY_DIR}/external)
 include_directories(${EXTERNAL_INSTALL_DIR}/include)
 link_directories(${EXTERNAL_INSTALL_DIR}/lib)
 
