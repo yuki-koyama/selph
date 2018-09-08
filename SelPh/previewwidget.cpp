@@ -31,11 +31,11 @@ void PreviewWidget::initializeGL()
 {
     glEnable(GL_MULTISAMPLE);
 
-    static const string mainShaderName("enhance");
+    static const string mainShaderName("enhancer");
 
-    const string bundlePath             = Utility::getResourceDirectory() + "/../Resources/shaders";
-    const string mainVertexShaderPath   = bundlePath + "/" + mainShaderName + ".vsh";
-    const string mainFragmentShaderPath = bundlePath + "/" + mainShaderName + ".fsh";
+    const string bundlePath             = Utility::getResourceDirectory() + "/shaders";
+    const string mainVertexShaderPath   = bundlePath + "/" + mainShaderName + ".vs";
+    const string mainFragmentShaderPath = bundlePath + "/" + mainShaderName + ".fs";
 
     // set shader program
     const int success = DrawUtility::loadShader(mainVertexShaderPath, mainFragmentShaderPath, &shaderProgram);

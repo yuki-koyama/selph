@@ -18,6 +18,8 @@ set(EXTERNAL_INSTALL_DIR ${CMAKE_BINARY_DIR}/external)
 include_directories(${EXTERNAL_INSTALL_DIR}/include)
 link_directories(${EXTERNAL_INSTALL_DIR}/lib)
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/enhancer)
+
 add_subdirectory(SelPh)
 
 include(ExternalProject)

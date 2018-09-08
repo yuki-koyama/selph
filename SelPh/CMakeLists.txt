@@ -17,7 +17,7 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 file(GLOB files *.cpp *.h *.ui)
 file(GLOB data_files_small ../resources/data/test_set_small/*.JPG)
 file(GLOB data_files ../resources/data/test_set/*.JPG)
-file(GLOB shader_files ../resources/shaders/enhance.fsh ../resources/shaders/enhance.vsh)
+file(GLOB shader_files ${ENHANCER_VERT_SHADER_PATH} ${ENHANCER_FRAG_SHADER_PATH})
 
 add_executable(
 	SelPh
@@ -44,4 +44,4 @@ set_source_files_properties(
 	MACOSX_PACKAGE_LOCATION Resources/shaders
 )
 set_target_properties(SelPh PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist.in)
-target_link_libraries(SelPh Qt5::Widgets Qt5::Concurrent Qt5::OpenGL ${NLopt_LIBRARIES} ${OPENGL_LIBRARIES} mathtoolbox)
+target_link_libraries(SelPh Qt5::Widgets Qt5::Concurrent Qt5::OpenGL ${NLopt_LIBRARIES} ${OPENGL_LIBRARIES} mathtoolbox enhancer)
