@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // set the directory path
     QString dirPath;
-    dirPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"), QString((Utility::getResourceDirectory() + "data/").c_str()), QFileDialog::ShowDirsOnly);
+    dirPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"), QString((Utility::getResourceDirectory() + "/data/").c_str()), QFileDialog::ShowDirsOnly);
     dirPath += "/";
 
     // initialize images

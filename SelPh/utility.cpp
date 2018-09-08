@@ -9,12 +9,12 @@ namespace Utility {
 
 string getResourceDirectory()
 {
-    return QCoreApplication::applicationDirPath().toStdString() + "/../Resources/";
+    return QCoreApplication::applicationDirPath().toStdString() + "/../Resources";
 }
 
 string getTemporaryDirectory()
 {
-    return QCoreApplication::applicationDirPath().toStdString() + "/../StudyData/";
+    return QCoreApplication::applicationDirPath().toStdString() + "/../StudyData";
 }
 
 vector<string> getPhotoFileList(string dirPath)
