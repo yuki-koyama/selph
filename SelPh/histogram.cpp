@@ -10,7 +10,7 @@
 #include <thread>
 #endif
 #include <QImage>
-#include "colorutility.h"
+#include <enhancer.hpp>
 
 using namespace Eigen;
 using namespace std;
@@ -109,7 +109,7 @@ void Histogram::computeHslHistogram()
         for (int y = 0; y < image->height(); ++ y)
         {
             const Vector3d rgb = qRgb2rgb(image->pixel(x, y));
-            pixels[x][y] = ColorUtility::rgb2hsl(rgb);
+            pixels[x][y] = enhancer::internal::rgb2hsl(rgb);
         }
     }
     hslHistogram.push_back(computeSingleChannelHistogram(nBins, image->height(), image->width(), 0, pixels));
