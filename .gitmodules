@@ -4,3 +4,6 @@
 [submodule "external/mathtoolbox"]
 	path = external/mathtoolbox
 	url = https://github.com/yuki-koyama/mathtoolbox.git
+[submodule "external/enhancer"]
+	path = external/enhancer
+	url = https://github.com/yuki-koyama/enhancer.git
