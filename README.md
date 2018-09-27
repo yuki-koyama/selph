@@ -1,6 +1,8 @@
 # SelPh
 A machine learning-based photo color enhancement system that implicitly learns users' preference.
 
+![](docs/images/system.jpg)
+
 ### Publication
 Yuki Koyama, Daisuke Sakamoto, and Takeo Igarashi. 2016. SelPh: Progressive Learning and Support of Manual Photo Color Enhancement. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '16), pp.2520--2532. DOI: http://dx.doi.org/10.1145/2858036.2858111
 
