@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.1)
-
 find_package(Eigen3 REQUIRED)
 find_package(NLopt REQUIRED)
 find_package(Qt5 COMPONENTS Widgets OpenGL Concurrent REQUIRED)
@@ -43,4 +41,4 @@ set_source_files_properties(
 	MACOSX_PACKAGE_LOCATION Resources/shaders
 )
 set_target_properties(SelPh PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist.in)
-target_link_libraries(SelPh Qt5::Widgets Qt5::Concurrent Qt5::OpenGL ${NLopt_LIBRARIES} ${OPENGL_LIBRARIES} mathtoolbox enhancer parallel-util)
+target_link_libraries(SelPh Qt5::Widgets Qt5::Concurrent Qt5::OpenGL ${NLopt_LIBRARIES} ${OPENGL_LIBRARIES} mathtoolbox enhancer parallel-util tinycolormap)

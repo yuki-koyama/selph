@@ -14,31 +14,16 @@ if(APPLE AND EXISTS /usr/local/opt/qt)
 	list(APPEND CMAKE_PREFIX_PATH "/usr/local/opt/qt")
 endif()
 
-set(EXTERNAL_INSTALL_DIR ${CMAKE_BINARY_DIR}/external)
-include_directories(${EXTERNAL_INSTALL_DIR}/include)
-link_directories(${EXTERNAL_INSTALL_DIR}/lib)
-
 set(PARALLELUTIL_BUILD_TESTS OFF CACHE INTERNAL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/parallel-util)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/enhancer)
 
+set(MATHTOOLBOX_BUILD_EXAMPLES      OFF CACHE INTERNAL "" FORCE)
+set(MATHTOOLBOX_NLOPT_BASED_MODULES OFF CACHE INTERNAL "" FORCE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/mathtoolbox)
+
+set(TINYCOLORMAP_BUILD_TOOLS OFF CACHE INTERNAL "" FORCE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/tinycolormap)
+
 add_subdirectory(SelPh)
-
-include(ExternalProject)
-ExternalProject_Add(
-	mathtoolbox
-	GIT_REPOSITORY ${CMAKE_SOURCE_DIR}/external/mathtoolbox
-	GIT_TAG c4c693507c8e49a58a21202d605e13e4c9d9bc65
-	INSTALL_DIR ${EXTERNAL_INSTALL_DIR}
-	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-)
-ExternalProject_Add(
-	tinycolormap
-	GIT_REPOSITORY ${CMAKE_SOURCE_DIR}/external/tinycolormap
-	GIT_TAG v0.1.0
-	INSTALL_DIR ${EXTERNAL_INSTALL_DIR}
-	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-)
-
-add_dependencies(SelPh tinycolormap mathtoolbox)
