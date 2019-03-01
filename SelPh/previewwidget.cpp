@@ -1,6 +1,7 @@
 #include "previewwidget.h"
 
 #include <string>
+#include <QOpenGLTexture>
 #include <QPainter>
 #include "drawutility.h"
 #include "core.h"
@@ -8,12 +9,13 @@
 
 using namespace std;
 
-namespace {
-Core& core = Core::getInstance();
+namespace
+{
+    Core& core = Core::getInstance();
 }
 
 PreviewWidget::PreviewWidget(QWidget *parent) :
-    QGLWidget(parent)
+QOpenGLWidget(parent)
 {
 }
 
@@ -37,13 +39,21 @@ void PreviewWidget::initializeGL()
     const string mainVertexShaderPath   = bundlePath + "/" + mainShaderName + ".vs";
     const string mainFragmentShaderPath = bundlePath + "/" + mainShaderName + ".fs";
 
+    std::cout << "Load shaders: " << mainVertexShaderPath << " & " << mainFragmentShaderPath << std::endl;
+
     // set shader program
     const int success = DrawUtility::loadShader(mainVertexShaderPath, mainFragmentShaderPath, &shaderProgram);
-    if (success < 0) exit(1);
+    if (success < 0)
+    {
+        std::cerr << "Shader load error." << std::endl;
+        exit(1);
+    }
 
     texLocation = glGetUniformLocation(shaderProgram, "texture");
     p1Location  = glGetUniformLocation(shaderProgram, "first");
     p2Location  = glGetUniformLocation(shaderProgram, "second");
+
+    glClearColor(0.0, 0.0, 0.0, 1.0);
 }
 
 void PreviewWidget::paintGL()
@@ -69,11 +79,6 @@ void PreviewWidget::paintGL()
     }
 
     // Draw background and image
-#if 0
-    glClearColor(150.0 / 255.0, 150.0 / 255.0, 150.0 / 255.0, 1.0);
-#else
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-#endif
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
@@ -85,8 +90,10 @@ void PreviewWidget::paintGL()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glEnable(GL_TEXTURE_2D);
-    texture = bindTexture(this->image, GL_TEXTURE_2D, GL_RGB);
-    glUniform1ui(texLocation, texture);
+
+    QOpenGLTexture* texture = new QOpenGLTexture(this->image.mirrored());
+    texture->bind();
+    glUniform1ui(texLocation, 0);
 
     glUniform3f(p1Location, core.parameters[0], core.parameters[1], core.parameters[2]);
     glUniform3f(p2Location, core.parameters[3], core.parameters[4], core.parameters[5]);

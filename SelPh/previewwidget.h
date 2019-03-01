@@ -1,10 +1,10 @@
 #ifndef PREVIEWWIDGET_H
 #define PREVIEWWIDGET_H
 
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QImage>
 
-class PreviewWidget : public QGLWidget
+class PreviewWidget : public QOpenGLWidget
 {
     Q_OBJECT
 public:
@@ -12,14 +12,12 @@ public:
 
     void setCurrentImage(const QImage &image);
 
-    QSize sizeHint() const;
-
-signals:
+    QSize sizeHint() const override;
 
 public slots:
-
-    void initializeGL();
-    void paintGL();
+    void initializeGL() override;
+    void paintGL() override;
+    void resizeGL(int w, int h) override {}
 
 private:
     QImage image;

@@ -20,11 +20,13 @@ namespace DrawUtility
         vtxShader = glCreateShader(GL_VERTEX_SHADER);
         frgShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-        if (_loadShader(vtxShader, vtxShdName) < 0) {
+        if (_loadShader(vtxShader, vtxShdName) < 0)
+        {
             return -1;
         }
 
-        if (_loadShader(frgShader, frgShdName) < 0) {
+        if (_loadShader(frgShader, frgShdName) < 0)
+        {
             return -1;
         }
 
