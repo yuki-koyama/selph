@@ -36,11 +36,11 @@ The source codes are released under the **MIT License**; see LICENSE.txt.
 
 - Eigen http://eigen.tuxfamily.org/ (`brew install eigen`)
 - Qt http://doc.qt.io/qt-5/ (`brew install qt`)
-- nlopt https://nlopt.readthedocs.io/ (included as a submodule)
-- mathtoolbox https://github.com/yuki-koyama/mathtoolbox (included as a submodule)
-- parallel-util https://github.com/yuki-koyama/parallel-util (included as a submodule)
 - enhancer https://github.com/yuki-koyama/enhancer (included as a submodule)
-- visoptslider https://github.com/yuki-koyama/visoptslider (included as a submodule)
+- mathtoolbox https://github.com/yuki-koyama/mathtoolbox (included as a submodule)
+- nlopt https://nlopt.readthedocs.io/ (included as a submodule)
+- parallel-util https://github.com/yuki-koyama/parallel-util (included as a submodule)
+- tinycolormap https://github.com/yuki-koyama/tinycolormap (included as a submodule)
 
 ## Test Photographs
 This repository includes a photo album for testing the software. These photographs were taken by Yuki Koyama, and licensed under [CC BY](https://creativecommons.org/licenses/by/4.0/). If you want higher resolution photographs, please contact us.
