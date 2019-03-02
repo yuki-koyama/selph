@@ -6,7 +6,6 @@
 
 class PreviewWidget : public QOpenGLWidget
 {
-    Q_OBJECT
 public:
     explicit PreviewWidget(QWidget *parent = 0);
 
@@ -14,7 +13,6 @@ public:
 
     QSize sizeHint() const override;
 
-public slots:
     void initializeGL() override;
     void paintGL() override;
     void resizeGL(int w, int h) override {}

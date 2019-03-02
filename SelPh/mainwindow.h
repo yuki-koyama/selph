@@ -8,14 +8,15 @@
 #include <QTimer>
 #include "visualizationwidget.h"
 
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -29,20 +30,16 @@ public:
 public slots:
     void updateParametersBySlider();
     void updateParametersByText();
-    
+
 private slots:
     void on_checkBox_vis_clicked();
-
     void on_checkBox_opt_clicked();
 
     void on_nextButton_clicked();
-
     void on_pushButton_auto_clicked();
 
     void on_actionExport_transformed_feature_coordinates_triggered();
-
     void on_actionRestart_timer_triggered();
-
     void on_actionDisable_functions_triggered();
 
 protected:

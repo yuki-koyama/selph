@@ -18,30 +18,31 @@
 
 using namespace std;
 
-namespace {
-Core& core = Core::getInstance();
-
-// For sliders
-const int maxValue = 1000;
-const int minValue = 1;
-inline double intToDouble(int i) { return static_cast<double>(i - minValue) / static_cast<double>(maxValue - minValue); }
-inline int doubleToInt(double d) { return static_cast<int>(d * (maxValue - minValue) + minValue); }
-
-// For labels
-inline void setText(shared_ptr<QLineEdit> lineEdit, const double value)
+namespace
 {
-    QString buffer;
-    buffer.sprintf("%.2f", value);
-    lineEdit->setText(buffer);
-}
+    Core& core = Core::getInstance();
 
-// For window control
-const string windowName("SelPh");
+    // For sliders
+    const int maxValue = 1000;
+    const int minValue = 1;
+    inline double intToDouble(int i) { return static_cast<double>(i - minValue) / static_cast<double>(maxValue - minValue); }
+    inline int doubleToInt(double d) { return static_cast<int>(d * (maxValue - minValue) + minValue); }
+
+    // For labels
+    inline void setText(shared_ptr<QLineEdit> lineEdit, const double value)
+    {
+        QString buffer;
+        buffer.sprintf("%.2f", value);
+        lineEdit->setText(buffer);
+    }
+
+    // For window control
+    const string windowName("SelPh");
 }
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+QMainWindow(parent),
+ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     core.mainWindow = this;
@@ -79,9 +80,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QFutureWatcher<void> watcher;
     QObject::connect(&watcher, SIGNAL(finished()), &dialog, SLOT(reset()));
     watcher.setFuture(QtConcurrent::run([dirPath] ()
-    {
-        core.initialize(dirPath.toStdString());
-    }));
+                                        {
+                                            core.initialize(dirPath.toStdString());
+                                        }));
     dialog.exec();
     watcher.waitForFinished();
 
@@ -98,7 +99,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
-{    
+{
     if (event->key() == Qt::Key_Space) // change the baseline size of GUI widgets (temporarily disable the window updates)
     {
         window()->setUpdatesEnabled(false);
@@ -377,9 +378,9 @@ void MainWindow::on_nextButton_clicked()
     // run the candidate generation in background
     bool result;
     watcher.setFuture(QtConcurrent::run([&result] ()
-    {
-        result = core.goNext();
-    }));
+                                        {
+                                            result = core.goNext();
+                                        }));
 
     // show a progress dialog in foreground
     dialog->exec();
