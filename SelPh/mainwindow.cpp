@@ -95,10 +95,10 @@ ui(new Ui::MainWindow)
     // Solve an awkward problem by a super awkward solution
     // See: https://www.qtcentre.org/threads/61310-Qt-application-won-t-repaint-until-first-resize?p=271316#post271316
     QTimer::singleShot(10, [&]()
-    {
-        this->setGeometry(this->geometry().adjusted(+ 1, + 1, - 1, - 1));
-        this->setGeometry(this->geometry().adjusted(- 1, - 1, + 1, + 1));
-    });
+                       {
+                           this->setGeometry(this->geometry().adjusted(+ 1, + 1, - 1, - 1));
+                           this->setGeometry(this->geometry().adjusted(- 1, - 1, + 1, + 1));
+                       });
 }
 
 MainWindow::~MainWindow()
@@ -175,7 +175,7 @@ void MainWindow::updateParametersBySlider()
     int focused = -1;
     for (int i = 0; i < core.parameterDim; ++ i)
     {
-        if (sliders[i]->isSliderDown()) focused = i;
+        if (sliders[i]->isSliderDown()) { focused = i; }
     }
 
     // user study
@@ -197,13 +197,14 @@ void MainWindow::updateParametersBySlider()
     }
 
     // update all sliders
-    for (int i = 0; i < core.parameterDim; ++ i) {
+    for (int i = 0; i < core.parameterDim; ++ i)
+    {
         shared_ptr<QSlider>   s = sliders[i];
         shared_ptr<QLineEdit> l = edits[i];
 
         const double value = core.parameters[i];
         setText(l, value);
-        if (i != focused) s->setValue(doubleToInt(value));
+        if (i != focused) { s->setValue(doubleToInt(value)); }
     }
 
     // user study
@@ -221,11 +222,12 @@ void MainWindow::updateParametersByText() {
     cerr << "Updating-parameters-by-text is not supported." << endl;
     return;
 
-    for (int i = 0; i < core.parameterDim; ++ i) {
+    for (int i = 0; i < core.parameterDim; ++ i)
+    {
         shared_ptr<QSlider>   s = sliders[i];
         shared_ptr<QLineEdit> l = edits[i];
 
-        double value = l->text().toDouble();
+        const double value = l->text().toDouble();
 
         s->setValue(doubleToInt(value));
         core.parameters[i] = value;
@@ -249,7 +251,7 @@ void MainWindow::initializeSliders() {
     core.parameterDim = 6;
     core.parameters.resize(core.parameterDim, 0.5);
 
-    const string names[] =
+    const vector<string> names =
     {
         "Brightness",
         "Contrast",
@@ -259,10 +261,10 @@ void MainWindow::initializeSliders() {
         "Balance (B)"
     };
 #else
-    core.dimension = 3;
-    core.parameters.resize(core.dimension, 0.5);
+    core.parameterDim = 3;
+    core.parameters.resize(core.parameterDim, 0.5);
 
-    const string names[] =
+    const vector<string> names =
     {
         "Brightness",
         "Contrast",
@@ -345,7 +347,7 @@ void MainWindow::generateSliderComponent(const string& name, const int index, co
     // add a label
     ui->sliderGridLayout->addWidget(new QLabel(name.c_str(), this), index * 5, 0);
 
-    if (last) return;
+    if (last) { return; }
 
     // add a line to the interface
     ui->sliderGridLayout->addItem(new QSpacerItem(0, 3, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding), index * 5 + 2, 0, 1, 3);
@@ -396,7 +398,7 @@ void MainWindow::on_nextButton_clicked()
     watcher.waitForFinished();
 
     // finish
-    if (!result) exit(0);
+    if (!result) { exit(0); }
 
     // Reference photos
     clearReferenceLayout();
@@ -425,7 +427,7 @@ void MainWindow::on_pushButton_auto_clicked()
     // Set the optimal parameter set
     Eigen::VectorXd x = core.isBaselineMode ? core.goodnessFunction.getAverageParameterSet() : core.goodnessFunction.getBestParameterSet(core.getCurrentFeatureVector());
     core.parameters.clear();
-    for (unsigned i = 0; i < x.rows(); ++ i) core.parameters.push_back(x(i));
+    for (unsigned i = 0; i < x.rows(); ++ i) { core.parameters.push_back(x(i)); }
     updateUIFromParameters();
 
     // User study
@@ -434,7 +436,8 @@ void MainWindow::on_pushButton_auto_clicked()
 
     // Repaint
     core.previewWidget->repaint();
-    for (shared_ptr<VisualizationWidget> vw : visualizationWidgets) {
+    for (shared_ptr<VisualizationWidget> vw : visualizationWidgets)
+    {
         vw->repaint();
     }
 }
