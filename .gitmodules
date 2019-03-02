@@ -1,6 +1,3 @@
-[submodule "external/tinycolormap"]
-	path = external/tinycolormap
-	url = https://github.com/yuki-koyama/tinycolormap.git
 [submodule "external/mathtoolbox"]
 	path = external/mathtoolbox
 	url = https://github.com/yuki-koyama/mathtoolbox.git
@@ -10,3 +7,9 @@
 [submodule "external/parallel-util"]
 	path = external/parallel-util
 	url = https://github.com/yuki-koyama/parallel-util.git
+[submodule "external/nlopt"]
+	path = external/nlopt
+	url = https://github.com/stevengj/nlopt.git
+[submodule "external/tinycolormap"]
+	path = external/tinycolormap
+	url = https://github.com/yuki-koyama/tinycolormap.git
