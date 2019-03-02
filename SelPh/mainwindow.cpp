@@ -91,6 +91,14 @@ ui(new Ui::MainWindow)
 
     // finalize
     this->adjustSize();
+
+    // Solve an awkward problem by a super awkward solution
+    // See: https://www.qtcentre.org/threads/61310-Qt-application-won-t-repaint-until-first-resize?p=271316#post271316
+    QTimer::singleShot(10, [&]()
+    {
+        this->setGeometry(this->geometry().adjusted(+ 1, + 1, - 1, - 1));
+        this->setGeometry(this->geometry().adjusted(- 1, - 1, + 1, + 1));
+    });
 }
 
 MainWindow::~MainWindow()
