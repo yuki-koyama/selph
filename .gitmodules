@@ -7,9 +7,6 @@
 [submodule "external/parallel-util"]
 	path = external/parallel-util
 	url = https://github.com/yuki-koyama/parallel-util.git
-[submodule "external/visoptslider"]
-	path = external/visoptslider
-	url = https://github.com/yuki-koyama/visoptslider.git
 [submodule "external/nlopt"]
 	path = external/nlopt
 	url = https://github.com/stevengj/nlopt.git
