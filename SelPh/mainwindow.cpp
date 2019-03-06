@@ -312,6 +312,7 @@ void MainWindow::generateSliderComponent(const string& name, const int index, co
     // generate a textedit
     shared_ptr<QLineEdit> l = make_shared<QLineEdit>(this);
     setText(l, core.getParameters()[index]);
+    l->setReadOnly(true);
     l->setMinimumWidth(core.getSizeOfTextBoxWidth());
     l->setMaximumWidth(core.getSizeOfTextBoxWidth());
     l->setMinimumHeight(core.getSizeOfTextBoxHeight());
