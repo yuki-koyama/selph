@@ -50,10 +50,14 @@ ui(new Ui::MainWindow)
 
     // Set preview widget
     core.previewWidget = new enhancer::EnhancerWidget(this);
-    core.previewWidget->setMinimumWidth(420);
-    core.previewWidget->setMinimumHeight(360);
+    core.previewWidget->setMinimumWidth(600);
+    core.previewWidget->setMinimumHeight(400);
     core.previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->verticalLayout_preview->insertWidget(0, core.previewWidget);
+
+    // Set stretches such that the control side is less stretchable than the preview side
+    ui->horizontalLayout->setStretch(0, 1);
+    ui->horizontalLayout->setStretch(1, 0);
 
     // set user interface size
     changeUiSize(core.uiSize);
