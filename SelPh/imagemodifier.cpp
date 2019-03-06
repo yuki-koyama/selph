@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cassert>
 #include <QImage>
-#include <enhancer.hpp>
+#include <enhancer/enhancer.hpp>
 #include <parallel-util.hpp>
 
 using std::vector;

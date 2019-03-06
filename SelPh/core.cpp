@@ -5,10 +5,10 @@
 #include <cstdlib>
 #include <ctime>
 #include <Eigen/SVD>
+#include <enhancer/enhancerwidget.hpp>
 #include <mathtoolbox/classical-mds.hpp>
 #include "mainwindow.h"
 #include "image.h"
-#include "previewwidget.h"
 #include "eigenutility.h"
 #include "histogram.h"
 #include "metriclearning.h"
@@ -34,6 +34,12 @@ Core::Core() :
     gradationResolution(40)
 {
     srand(time(NULL));
+}
+
+void Core::setParameters(const std::vector<double>& parameters)
+{
+    parameters_ = parameters;
+    previewWidget->setParameters(parameters_);
 }
 
 void Core::setReferencePhotos()
@@ -218,13 +224,13 @@ void Core::initialize(const string& dirPath)
     exportRawDistance();
 
     // Set the first photo to the UI
-    previewWidget->setCurrentImage(*images[currentIndex]->getScaledQImage());
+    previewWidget->setImage(*images[currentIndex]->getScaledQImage());
 
     // Prepare data for study (for the first time only)
     studyData.resize(images.size());
 
     // Start study
-    const VectorXd x = EigenUtility::std2eigen(parameters);
+    const VectorXd x = EigenUtility::std2eigen(parameters_);
     getCurrentStudyData().confidence         = confidence;
     getCurrentStudyData().autoParameter      = x;
     getCurrentStudyData().naiveAutoParameter = x;
@@ -265,7 +271,7 @@ double Core::computeConfidence(unsigned index) const
 
 bool Core::goNext()
 {
-    const VectorXd x = EigenUtility::std2eigen(parameters);
+    const VectorXd x = EigenUtility::std2eigen(parameters_);
     const shared_ptr<Image> currentImage = images[currentIndex];
 
     // for study
@@ -349,15 +355,15 @@ bool Core::goNext()
     const VectorXd opt = goodnessFunction.getBestParameterSet(getCurrentFeatureVector());
     if (useInitialOptimization)
     {
-        parameters = EigenUtility::eigen2std(opt);
+        setParameters(EigenUtility::eigen2std(opt));
     }
     else
     {
-        parameters = vector<double>(parameters.size(), 0.5);
+        setParameters(vector<double>(parameterDim, 0.5));
     }
 
     // Update preview
-    previewWidget->setCurrentImage(*nextImage->getScaledQImage());
+    previewWidget->setImage(*nextImage->getScaledQImage());
 
     // Store the enhanced photo
     enhancedImages.push_back(currentImage->getModifiedScaledQImage(x));
@@ -386,12 +392,12 @@ void Core::optimizeParameters(int exclusiveParameter)
     if (currentIndex < 2) return;
 
     const double   scale     = confidence / (localMax - localMin);
-    const VectorXd p_current = EigenUtility::std2eigen(parameters);
+    const VectorXd p_current = EigenUtility::std2eigen(parameters_);
     const VectorXd f         = images[currentIndex]->getFeatureVector();
 
     VectorXd p_new     = goodnessFunction.applyGradientAscent(p_current, f, scale);
-    p_new(exclusiveParameter) = parameters[exclusiveParameter];
-    parameters = EigenUtility::eigen2std(p_new);
+    p_new(exclusiveParameter) = parameters_[exclusiveParameter];
+    setParameters(EigenUtility::eigen2std(p_new));
 }
 
 //////////////////////////////////////////////

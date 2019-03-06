@@ -50,7 +50,7 @@ void VisualizationWidget::paintEvent(QPaintEvent *event)
     // gradation
     int res = core.gradationResolution;
     int wid = w / res;
-    vector<double> x = core.parameters;
+    vector<double> x = core.getParameters();
     for (int i = wid / 2; i < w; i += wid) {
         x[index] = static_cast<double>(i) / static_cast<double>(w - 1);
         double value = core.goodnessFunction.getValue(EigenUtility::std2eigen(x), core.getCurrentFeatureVector());
@@ -73,7 +73,7 @@ void VisualizationWidget::paintEvent(QPaintEvent *event)
     }
 
     // current position
-    double curPos   = core.parameters[index] * static_cast<double>(w);
+    double curPos   = core.getParameters()[index] * static_cast<double>(w);
     double curWidth = 10.0;
     QRectF curRect(curPos - curWidth / 2.0, 0.0, curWidth, static_cast<double>(h));
     QPen   curPen(QColor(0x00, 0x00, 0x00));

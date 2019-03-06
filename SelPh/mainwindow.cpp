@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <enhancer/enhancerwidget.hpp>
 #include <QLabel>
 #include <QFileDialog>
 #include <QFile>
@@ -12,7 +13,6 @@
 #include <QtConcurrent>
 #include "core.h"
 #include "utility.h"
-#include "previewwidget.h"
 #include "eigenutility.h"
 #include "imagewidget.h"
 
@@ -48,9 +48,12 @@ ui(new Ui::MainWindow)
     core.mainWindow = this;
     setWindowTitle(windowName.c_str());
 
-    // set preview widget
-    ui->previewwidget->setMinimumWidth(420);
-    core.previewWidget = ui->previewwidget;
+    // Set preview widget
+    core.previewWidget = new enhancer::EnhancerWidget(this);
+    core.previewWidget->setMinimumWidth(420);
+    core.previewWidget->setMinimumHeight(360);
+    core.previewWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->verticalLayout_preview->insertWidget(0, core.previewWidget);
 
     // set user interface size
     changeUiSize(core.uiSize);
@@ -152,8 +155,8 @@ void MainWindow::updateUIFromParameters()
     {
         shared_ptr<QSlider>   s = sliders[i];
         shared_ptr<QLineEdit> l = edits[i];
-        s->setValue(doubleToInt(core.parameters[i]));
-        setText(l, core.parameters[i]);
+        s->setValue(doubleToInt(core.getParameters()[i]));
+        setText(l, core.getParameters()[i]);
     }
 }
 
@@ -179,18 +182,23 @@ void MainWindow::updateParametersBySlider()
     }
 
     // user study
-    const double before = core.parameters[focused];
+    const double before = core.getParameters()[focused];
     const double after  = intToDouble(sliders[focused]->value());
     core.getCurrentStudyData().sliderMovementSum += fabs(after - before);
 
     // update core parameters from sliders
     const shared_ptr<QSlider> s = sliders[focused];
     const double              v = intToDouble(s->value());
-    core.parameters[focused] = v;
+
+    core.setParameters([&]()
+    {
+        vector<double> temp_x = core.getParameters();
+        temp_x[focused] = v;
+        return temp_x;
+    }());
 
     // optimization
-    int n = core.useOptimization ? core.nIterations : 0;
-
+    const int n = core.useOptimization ? core.nIterations : 0;
     for (int i = 0; i < n; ++ i)
     {
         core.optimizeParameters(focused);
@@ -202,13 +210,13 @@ void MainWindow::updateParametersBySlider()
         shared_ptr<QSlider>   s = sliders[i];
         shared_ptr<QLineEdit> l = edits[i];
 
-        const double value = core.parameters[i];
+        const double value = core.getParameters()[i];
         setText(l, value);
         if (i != focused) { s->setValue(doubleToInt(value)); }
     }
 
     // user study
-    core.getCurrentStudyData().parameterSequence.push_back(EigenUtility::std2eigen(core.parameters));
+    core.getCurrentStudyData().parameterSequence.push_back(EigenUtility::std2eigen(core.getParameters()));
 
     // refresh
     for (shared_ptr<VisualizationWidget> vw : visualizationWidgets)
@@ -219,29 +227,8 @@ void MainWindow::updateParametersBySlider()
 }
 
 void MainWindow::updateParametersByText() {
-    cerr << "Updating-parameters-by-text is not supported." << endl;
+    cerr << "Updating parameters by text is not supported." << endl;
     return;
-
-    for (int i = 0; i < core.parameterDim; ++ i)
-    {
-        shared_ptr<QSlider>   s = sliders[i];
-        shared_ptr<QLineEdit> l = edits[i];
-
-        const double value = l->text().toDouble();
-
-        s->setValue(doubleToInt(value));
-        core.parameters[i] = value;
-    }
-
-    // user study
-    core.getCurrentStudyData().parameterSequence.push_back(EigenUtility::std2eigen(core.parameters));
-
-    // refresh
-    for (shared_ptr<VisualizationWidget> vw : visualizationWidgets)
-    {
-        vw->repaint();
-    }
-    core.previewWidget->repaint();
 }
 
 #define COLORBALANCE
@@ -249,7 +236,7 @@ void MainWindow::updateParametersByText() {
 void MainWindow::initializeSliders() {
 #ifdef COLORBALANCE
     core.parameterDim = 6;
-    core.parameters.resize(core.parameterDim, 0.5);
+    core.setParameters(std::vector<double>(6, 0.5));
 
     const vector<string> names =
     {
@@ -262,7 +249,7 @@ void MainWindow::initializeSliders() {
     };
 #else
     core.parameterDim = 3;
-    core.parameters.resize(core.parameterDim, 0.5);
+    core.setParameters(std::vector<double>(3, 0.5));
 
     const vector<string> names =
     {
@@ -317,14 +304,14 @@ void MainWindow::generateSliderComponent(const string& name, const int index, co
     shared_ptr<QSlider> s = make_shared<QSlider>(Qt::Horizontal, this);
     s->setMinimum(minValue);
     s->setMaximum(maxValue);
-    s->setValue(doubleToInt(core.parameters[index]));
+    s->setValue(doubleToInt(core.getParameters()[index]));
     s->setMinimumWidth(200);
     QObject::connect(s.get(), SIGNAL(sliderMoved(int)), this, SLOT(updateParametersBySlider()));
     QObject::connect(s.get(), SIGNAL(sliderPressed()), this, SLOT(updateParametersBySlider()));
 
     // generate a textedit
     shared_ptr<QLineEdit> l = make_shared<QLineEdit>(this);
-    setText(l, core.parameters[index]);
+    setText(l, core.getParameters()[index]);
     l->setMinimumWidth(core.getSizeOfTextBoxWidth());
     l->setMaximumWidth(core.getSizeOfTextBoxWidth());
     l->setMinimumHeight(core.getSizeOfTextBoxHeight());
@@ -425,14 +412,13 @@ void MainWindow::on_pushButton_auto_clicked()
     if (core.goodnessFunction.getParameterList().empty()) return;
 
     // Set the optimal parameter set
-    Eigen::VectorXd x = core.isBaselineMode ? core.goodnessFunction.getAverageParameterSet() : core.goodnessFunction.getBestParameterSet(core.getCurrentFeatureVector());
-    core.parameters.clear();
-    for (unsigned i = 0; i < x.rows(); ++ i) { core.parameters.push_back(x(i)); }
+    const Eigen::VectorXd x = core.isBaselineMode ? core.goodnessFunction.getAverageParameterSet() : core.goodnessFunction.getBestParameterSet(core.getCurrentFeatureVector());
+    core.setParameters(EigenUtility::eigen2std(x));
     updateUIFromParameters();
 
     // User study
     core.getCurrentStudyData().autoEnhanced = true;
-    core.getCurrentStudyData().parameterSequence.push_back(EigenUtility::std2eigen(core.parameters));
+    core.getCurrentStudyData().parameterSequence.push_back(EigenUtility::std2eigen(core.getParameters()));
 
     // Repaint
     core.previewWidget->repaint();

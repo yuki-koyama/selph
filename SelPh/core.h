@@ -10,9 +10,9 @@
 #include "goodnessfunction.h"
 
 class MainWindow;
-class PreviewWidget;
 class Image;
 class QImage;
+namespace enhancer { class EnhancerWidget; }
 
 class Core
 {
@@ -28,9 +28,6 @@ public:
     // constant values
     int parameterDim;
     const int featureDim;
-
-    // parameters
-    std::vector<double> parameters;
 
     // This member is computed in the initialization stage only once
     typedef std::vector<std::vector<std::vector<double>>> Distance;
@@ -52,8 +49,8 @@ public:
     void computeMetricLearning();
 
     // user interface
-    MainWindow*    mainWindow;
-    PreviewWidget* previewWidget;
+    MainWindow* mainWindow;
+    enhancer::EnhancerWidget* previewWidget;
 
     // Reference photo management
     const unsigned nReferencePhotos;
@@ -106,7 +103,12 @@ public:
     // Export / Import methods
     void printFeatureCoordinates(std::ostream& stream = std::cout) const;
 
+    void setParameters(const std::vector<double>& parameters);
+    const std::vector<double>& getParameters() const { return parameters_; }
+
 private:
+
+    std::vector<double> parameters_;
 
     // Multi-dimensional scaling
     Eigen::MatrixXd D;

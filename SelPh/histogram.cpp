@@ -10,7 +10,7 @@
 #include <thread>
 #endif
 #include <QImage>
-#include <enhancer.hpp>
+#include <enhancer/enhancer.hpp>
 
 using namespace Eigen;
 using namespace std;
