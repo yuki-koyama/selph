@@ -9,8 +9,8 @@ Yuki Koyama, Daisuke Sakamoto, and Takeo Igarashi. 2016. SelPh: Progressive Lear
 ### Project Page
 Please visit our project page for details: <http://koyama.xyz/project/SelPh/>
 
-### Languages
-C++11 is used for most parts. For real-time photo color enhancement, GLSL is used.
+### Languages and Runtime Environments
+C++11 is used mainly. Real-time photo color enhancement is written by using programmable shaders, which require OpenGL 3.2 and GLSL 3.3 supports.
 
 ## Set Up
 
