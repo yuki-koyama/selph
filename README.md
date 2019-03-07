@@ -1,5 +1,5 @@
 # SelPh
-A machine learning-based photo color enhancement system that implicitly learns users' preference.
+A machine-learning-based photo color enhancement system that implicitly learns users' preference.
 
 ![](docs/images/system.jpg)
 
@@ -10,7 +10,7 @@ Yuki Koyama, Daisuke Sakamoto, and Takeo Igarashi. 2016. SelPh: Progressive Lear
 Please visit our project page for details: <http://koyama.xyz/project/SelPh/>
 
 ### Languages and Runtime Environments
-C++11 is used mainly. Real-time photo color enhancement is written by using programmable shaders, which require OpenGL 3.2 and GLSL 3.3 supports.
+Main functionality is written in C++11. Real-time photo color enhancement is written in programmable shaders, which require support of both OpenGL 3.2 Core Profile and GLSL 3.3.
 
 ## Set Up
 
