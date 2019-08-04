@@ -6,11 +6,11 @@
 #include <ctime>
 #include <Eigen/SVD>
 #include <enhancer/enhancerwidget.hpp>
+#include <imagedistance.hpp>
 #include <mathtoolbox/classical-mds.hpp>
 #include "mainwindow.h"
 #include "image.h"
 #include "eigenutility.h"
-#include "histogram.h"
 #include "metriclearning.h"
 
 using std::vector;
@@ -77,38 +77,37 @@ inline vector<double> computeDistanceBetweenImages(const shared_ptr<Image> a, co
 {
     vector<double> d;
 
+    const vector<std::function<double(const imagedistance::Histogram&, const imagedistance::Histogram&)>> metrics =
+    {
+        imagedistance::CalcL2Distance,
+        imagedistance::CalcSmoothedL2Distance,
+        imagedistance::CalcSymmetricKlDivergenceDistance,
+        imagedistance::CalcEntropyDistance,
+    };
+
     // Histogram-based distances
-    for (unsigned k = 0; k < 3; ++ k)
+    for (const auto& metric : metrics)
     {
-        d.push_back(Histogram::computeL2Distance(a->getHistogram()->rgbHistogram[k], b->getHistogram()->rgbHistogram[k]));
-        d.push_back(Histogram::computeSmoothedL2Distance(a->getHistogram()->rgbHistogram[k], b->getHistogram()->rgbHistogram[k]));
-        d.push_back(Histogram::computeSymmetricKLDivergenceDistance(a->getHistogram()->rgbHistogram[k], b->getHistogram()->rgbHistogram[k]));
-        d.push_back(Histogram::computeEntropyDistance(a->getHistogram()->rgbHistogram[k], b->getHistogram()->rgbHistogram[k]));
-    }
-    for (unsigned k = 0; k < 3; ++ k)
-    {
-        d.push_back(Histogram::computeL2Distance(a->getHistogram()->hslHistogram[k], b->getHistogram()->hslHistogram[k]));
-        d.push_back(Histogram::computeSmoothedL2Distance(a->getHistogram()->hslHistogram[k], b->getHistogram()->hslHistogram[k]));
-        d.push_back(Histogram::computeSymmetricKLDivergenceDistance(a->getHistogram()->hslHistogram[k], b->getHistogram()->hslHistogram[k]));
-        d.push_back(Histogram::computeEntropyDistance(a->getHistogram()->hslHistogram[k], b->getHistogram()->hslHistogram[k]));
-    }
-    {
-        d.push_back(Histogram::computeL2Distance(a->getHistogram()->intensityHistogram, b->getHistogram()->intensityHistogram));
-        d.push_back(Histogram::computeSmoothedL2Distance(a->getHistogram()->intensityHistogram, b->getHistogram()->intensityHistogram));
-        d.push_back(Histogram::computeSymmetricKLDivergenceDistance(a->getHistogram()->intensityHistogram, b->getHistogram()->intensityHistogram));
-        d.push_back(Histogram::computeEntropyDistance(a->getHistogram()->intensityHistogram, b->getHistogram()->intensityHistogram));
-    }
-    for (unsigned k = 0; k < 2; ++ k)
-    {
-        d.push_back(Histogram::computeL2Distance(a->getHistogram()->edgeHistogram[k], b->getHistogram()->edgeHistogram[k]));
-        d.push_back(Histogram::computeSmoothedL2Distance(a->getHistogram()->edgeHistogram[k], b->getHistogram()->edgeHistogram[k]));
-        d.push_back(Histogram::computeSymmetricKLDivergenceDistance(a->getHistogram()->edgeHistogram[k], b->getHistogram()->edgeHistogram[k]));
-        d.push_back(Histogram::computeEntropyDistance(a->getHistogram()->edgeHistogram[k], b->getHistogram()->edgeHistogram[k]));
+        for (unsigned k = 0; k < 3; ++ k)
+        {
+            d.push_back(metric(a->getHistogram()->m_rgb_histograms[k], b->getHistogram()->m_rgb_histograms[k]));
+        }
+        for (unsigned k = 0; k < 3; ++ k)
+        {
+            d.push_back(metric(a->getHistogram()->m_hsl_histograms[k], b->getHistogram()->m_hsl_histograms[k]));
+        }
+        d.push_back(metric(a->getHistogram()->m_intensity_histogram, b->getHistogram()->m_intensity_histogram));
+        for (unsigned k = 0; k < 2; ++ k)
+        {
+            d.push_back(metric(a->getHistogram()->m_edge_histograms[k], b->getHistogram()->m_edge_histograms[k]));
+        }
     }
 
     // Other distances
     d.push_back(std::abs(a->getAspectRatio() - b->getAspectRatio()));
     d.push_back(std::abs(a->getSize() - b->getSize()));
+
+    assert(d.size() == 38);
 
     return d;
 }
