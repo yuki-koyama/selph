@@ -18,6 +18,7 @@ addons:
   apt:
     packages:
     - libeigen3-dev
+    - libqt5opengl5-dev
     - qt5-default
 
 script:
