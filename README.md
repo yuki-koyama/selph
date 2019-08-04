@@ -1,4 +1,8 @@
 # SelPh
+
+[![Build Status](https://travis-ci.com/yuki-koyama/selph.svg?branch=master)](https://travis-ci.com/yuki-koyama/selph)
+![GitHub](https://img.shields.io/github/license/yuki-koyama/selph)
+
 A machine-learning-based photo color enhancement system that implicitly learns users' preference.
 
 ![](docs/images/system.jpg)
