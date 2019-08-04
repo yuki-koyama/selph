@@ -126,7 +126,7 @@ void Histogram::computeIntensityHistogram()
         for (int y = 0; y < image->height(); ++ y)
         {
             const Vector3d rgb = qRgb2rgb(image->pixel(x, y));
-            pixels[x][y] = rgb.sum();
+            pixels[x][y] = rgb.mean();
         }
     }
     intensityHistogram = computeSingleChannelHistogram(nBins, image->height(), image->width(), pixels);
@@ -142,7 +142,7 @@ void Histogram::computeEdgeHistogram()
         for (int y = 0; y < image->height(); ++ y)
         {
             const Vector3d rgb = qRgb2rgb(image->pixel(x, y));
-            pixels[x][y] = rgb.sum();
+            pixels[x][y] = rgb.mean();
         }
     }
 
@@ -154,7 +154,7 @@ void Histogram::computeEdgeHistogram()
         for (int y = 0; y < image->height(); ++ y)
         {
             // Ignore the edges of the image
-            if (x == 0 || x == image->width() - 1 || y == 0 || y == image->height()) continue;
+            if (x == 0 || x == image->width() - 1 || y == 0 || y == image->height() - 1) continue;
 
             // Sobel filter
             double grad = - 1.0 * pixels[x - 1][y - 1] + 0.0 * pixels[x + 0][y - 1] + 1.0 * pixels[x + 1][y - 1]
@@ -172,7 +172,7 @@ void Histogram::computeEdgeHistogram()
         for (int y = 0; y < image->height(); ++ y)
         {
             // Ignore the edges of the image
-            if (x == 0 || x == image->width() - 1 || y == 0 || y == image->height()) continue;
+            if (x == 0 || x == image->width() - 1 || y == 0 || y == image->height() - 1) continue;
 
             // Sobel filter
             double grad = + 1.0 * pixels[x - 1][y - 1] + 2.0 * pixels[x + 0][y - 1] + 1.0 * pixels[x + 1][y - 1]
