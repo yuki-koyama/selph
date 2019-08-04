@@ -41,6 +41,7 @@ The source codes are released under the **MIT License**; see LICENSE.txt.
 - Eigen http://eigen.tuxfamily.org/ (`brew install eigen`)
 - Qt http://doc.qt.io/qt-5/ (`brew install qt`)
 - enhancer https://github.com/yuki-koyama/enhancer (included as a submodule)
+- imagedistance https://github.com/yuki-koyama/imagedistance (included as a submodule)
 - mathtoolbox https://github.com/yuki-koyama/mathtoolbox (included as a submodule)
 - nlopt https://nlopt.readthedocs.io/ (included as a submodule)
 - parallel-util https://github.com/yuki-koyama/parallel-util (included as a submodule)
