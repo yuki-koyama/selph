@@ -3,6 +3,7 @@
 #include "core.h"
 
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <Eigen/SVD>
 #include <enhancer/enhancerwidget.hpp>
@@ -75,39 +76,12 @@ namespace
 
 inline vector<double> computeDistanceBetweenImages(const shared_ptr<Image> a, const shared_ptr<Image> b)
 {
-    vector<double> d;
+    const Eigen::VectorXd distance_vector = imagedistance::CalcDistances(*(a->getHistogram()), *(b->getHistogram()));
 
-    const vector<std::function<double(const imagedistance::Histogram&, const imagedistance::Histogram&)>> metrics =
-    {
-        imagedistance::CalcL2Distance,
-        imagedistance::CalcSmoothedL2Distance,
-        imagedistance::CalcSymmetricKlDivergenceDistance,
-        imagedistance::CalcEntropyDistance,
-    };
+    assert(distance_vector.size() == 38);
 
-    // Histogram-based distances
-    for (const auto& metric : metrics)
-    {
-        for (unsigned k = 0; k < 3; ++ k)
-        {
-            d.push_back(metric(a->getHistogram()->m_rgb_histograms[k], b->getHistogram()->m_rgb_histograms[k]));
-        }
-        for (unsigned k = 0; k < 3; ++ k)
-        {
-            d.push_back(metric(a->getHistogram()->m_hsl_histograms[k], b->getHistogram()->m_hsl_histograms[k]));
-        }
-        d.push_back(metric(a->getHistogram()->m_intensity_histogram, b->getHistogram()->m_intensity_histogram));
-        for (unsigned k = 0; k < 2; ++ k)
-        {
-            d.push_back(metric(a->getHistogram()->m_edge_histograms[k], b->getHistogram()->m_edge_histograms[k]));
-        }
-    }
-
-    // Other distances
-    d.push_back(std::abs(a->getAspectRatio() - b->getAspectRatio()));
-    d.push_back(std::abs(a->getSize() - b->getSize()));
-
-    assert(d.size() == 38);
+    vector<double> d(38);
+    std::memcpy(d.data(), distance_vector.data(), sizeof(double) * 38);
 
     return d;
 }
